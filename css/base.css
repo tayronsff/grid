@@ -1,0 +1,82 @@
+/* Base - GridBoard (Dark Motorsport Theme) */
+:root {
+  --bg: #111111; /* Near Black */
+  --bg-elev: #1D1D1D;
+  --card: #242424;
+  --line: #333333;
+  --text: #FFFFFF;
+  --muted: #A3A3A3;
+  --grad-start: #FF4100; /* Vibrant Orange */
+  --grad-end: #FF0000;   /* Bright Red */
+  --accent-alt: #FF4100;
+  --alert: #FFD60A;
+  --success: #30A46C;
+  --danger: #E5484D;
+  --shadow: 0 10px 30px rgba(0,0,0,.6);
+  --page-max: 1200px;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,h2,h3,h4 {
+  margin: 0 0 .75rem;
+  font-family: 'Exo 2', 'Inter', sans-serif;
+  font-weight: 700;
+  letter-spacing: .01em;
+}
+
+img { max-width: 100%; display: block; }
+button { font: inherit; color: inherit; cursor: pointer; }
+input, textarea { font: inherit; color: var(--text); background: var(--bg-elev); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+label { display:block; margin: 0 0 .35rem; color: var(--muted); font-size: .9rem; }
+
+.screen { display: none; min-height: 100dvh; }
+.screen.active { display: block; }
+
+.main-header, .screen-header {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(11,12,14,.8);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+
+.container { width: 100%; max-width: 1140px; margin: 0 auto; padding: 0 20px; }
+
+/* Generic page container for desktop width constraint */
+.page-container { width: 100%; max-width: var(--page-max); margin: 0 auto; padding: 0 16px; }
+
+/***** Utilities *****/
+.hidden { display: none !important; }
+.center { display:flex; align-items:center; justify-content:center; }
+.grid { display:grid; gap: 12px; }
+.row { display:flex; gap:12px; flex-wrap: wrap; }
+.mt-16{ margin-top:16px; } .mb-16{ margin-bottom:16px; }
+.mt-24{ margin-top:24px; } .mb-24{ margin-bottom:24px; }
+
+/***** Bottom Nav spacing for mobile *****/
+.bottom-pad { padding-bottom: 72px; }
+
+/***** Typography helpers *****/
+.muted { color: var(--muted); }
+.badge { font-size: .75rem; letter-spacing:.04em; text-transform: uppercase; }
+
+/* Scrollbar subtle */
+::-webkit-scrollbar{ height:8px; width:8px; }
+::-webkit-scrollbar-thumb{ background:#22252b; border-radius:8px; }
+
+/* Responsive */
+@media (min-width: 768px){
+  .container { padding: 0 24px; }
+}
+@media (min-width: 1024px){
+  body { background: linear-gradient(160deg,#0b0c0e 0%, #0a0b0c 60%), radial-gradient(1000px 400px at 20% -10%, rgba(255,106,0,.05), transparent); }
+}

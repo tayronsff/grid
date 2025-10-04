@@ -1,0 +1,38 @@
+<div class="screen" id="create-championship-screen">
+    <header class="screen-header page-container">
+        <button class="btn-back" onclick="showScreen('profile-screen')">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <h1>Cadastrar Campeonato</h1>
+        <div></div>
+    </header>
+
+    <div class="main-content page-container">
+        <form id="create-championship-form" class="create-form">
+            <div class="input-group">
+                <label for="champ-name">Nome do Campeonato</label>
+                <input type="text" id="champ-name" name="name" required>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="champ-date">Data</label>
+                    <input type="date" id="champ-date" name="date" required>
+                </div>
+                <div class="input-group">
+                    <label for="champ-place">Local</label>
+                    <input type="text" id="champ-place" name="place" required>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="champ-image">Imagem de Capa</label>
+                <input type="file" id="champ-image" name="image" accept="image/*" required>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">Salvar Campeonato</button>
+            </div>
+        </form>
+    </div>
+</div>

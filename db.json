@@ -1,0 +1,27 @@
+{
+  "championships": [
+    {
+      "id": 1759600076682,
+      "name": "Campeonato TSKC",
+      "date": "2025-10-31",
+      "place": "Kartódromo Ingleses",
+      "image": "/uploads/1759600076655-20250706_090841.jpg"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "email": "test@example.com",
+      "name": "Test User",
+      "password": "$2b$10$abcdefghijklmnopqrstuv",
+      "registeredChampionships": []
+    },
+    {
+      "id": 1759607781136,
+      "name": "Tayron Sanches",
+      "email": "tayronsff@gmail.com",
+      "password": "$2b$10$nuMYbgAQDx2j6LvtPQg5COljGdEQreHqhTAK5A6EFyDb6mqSDPHZC",
+      "registeredChampionships": []
+    }
+  ]
+}
