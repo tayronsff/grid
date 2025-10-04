@@ -459,29 +459,26 @@
         </header>
 
         <div class="profile-content page-container">
-            <div class="profile-avatar-section">
-                <div class="avatar-container">
-                    <img src="https://i.pravatar.cc/120?img=12" alt="Avatar" class="profile-avatar">
-                    <button class="btn-change-avatar" onclick="changeAvatar()">
-                        <i class="fas fa-camera"></i>
-                    </button>
+            <form id="profile-form" class="profile-form">
+                <div class="profile-avatar-section">
+                    <div class="avatar-container">
+                        <img id="profile-avatar-img" src="https://i.pravatar.cc/120?u=1" alt="Avatar" class="profile-avatar">
+                    </div>
                 </div>
-            </div>
 
-            <form class="profile-form">
                 <div class="input-group">
-                    <label>Nome</label>
-                    <input type="text" value="João" placeholder="Seu nome">
+                    <label for="profile-picture-url">URL da Imagem de Perfil</label>
+                    <input type="url" id="profile-picture-url" placeholder="https://exemplo.com/sua-foto.jpg">
+                </div>
+
+                <div class="input-group">
+                    <label for="profile-form-name">Nome</label>
+                    <input type="text" id="profile-form-name" placeholder="Seu nome">
                 </div>
                 
                 <div class="input-group">
-                    <label>Sobrenome</label>
-                    <input type="text" value="Silva" placeholder="Seu sobrenome">
-                </div>
-                
-                <div class="input-group">
-                    <label>E-mail</label>
-                    <input type="email" value="joao@email.com" placeholder="Seu e-mail">
+                    <label for="profile-form-email">E-mail</label>
+                    <input type="email" id="profile-form-email" placeholder="Seu e-mail">
                 </div>
                 
                 <button type="submit" class="btn-primary">

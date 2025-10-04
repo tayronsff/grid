@@ -23,6 +23,7 @@ const UserSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    picture: { type: String, default: '' },
     registeredChampionships: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Championship' }],
     resetPasswordToken: String,
     resetPasswordExpires: Date
@@ -184,6 +185,41 @@ app.post('/users/:id/register', async (req, res) => {
         res.status(200).json(userToReturn);
     } catch (error) {
         res.status(500).send('Error registering for championship.');
+    }
+});
+
+// Update User Profile
+app.put('/users/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, email, picture } = req.body;
+
+        const userToUpdate = await User.findById(id);
+        if (!userToUpdate) {
+            return res.status(404).send('User not found.');
+        }
+
+        // Check if email is being changed and if the new one is already taken
+        if (email && email !== userToUpdate.email) {
+            const existingUser = await User.findOne({ email });
+            if (existingUser) {
+                return res.status(400).send('Email already in use.');
+            }
+            userToUpdate.email = email;
+        }
+
+        userToUpdate.name = name || userToUpdate.name;
+        userToUpdate.picture = picture || userToUpdate.picture;
+
+        await userToUpdate.save();
+
+        const userToReturn = userToUpdate.toObject();
+        delete userToReturn.password;
+
+        res.status(200).json(userToReturn);
+
+    } catch (error) {
+        res.status(500).send('Error updating user profile.');
     }
 });
 
