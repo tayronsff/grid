@@ -152,7 +152,8 @@ window.addEventListener('DOMContentLoaded', ()=>{
     });
   }
 
-  let currentUser = null;
+  const API_URL = 'https://gridboard.onrender.com';
+let currentUser = null;
 
 
 function updateUIAfterLogin(user) {
@@ -220,7 +221,7 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
     }
 
     try {
-        const response = await fetch('http://localhost:3000/auth/register', {
+        const response = await fetch(`${API_URL}/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email, password })
@@ -247,7 +248,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     const password = form.querySelector('input[type="password"]').value;
 
     try {
-        const response = await fetch('http://localhost:3000/auth/login', {
+        const response = await fetch(`${API_URL}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
@@ -272,7 +273,7 @@ async function handleForgotPassword() {
     if (!email) return;
 
     try {
-        const response = await fetch('http://localhost:3000/auth/forgot-password', {
+        const response = await fetch(`${API_URL}/auth/forgot-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })
@@ -292,12 +293,11 @@ async function registerForEvent(championshipId) {
     }
 
     try {
-        const response = await fetch(`http://localhost:3000/users/${currentUser.id}/register`, {
+        const response = await fetch(`${API_URL}/users/${currentUser._id}/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ championshipId })
         });
-
         if (response.ok) {
             const updatedUser = await response.json();
             currentUser = updatedUser;
@@ -325,7 +325,7 @@ document.getElementById('create-championship-form').addEventListener('submit', a
     };
 
     try {
-        const response = await fetch('http://localhost:3000/championships', {
+        const response = await fetch(`${API_URL}/championships`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
