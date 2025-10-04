@@ -181,6 +181,47 @@ function logout() {
     showScreen('home-screen');
 }
 
+async function loadChampionships() {
+    try {
+        const response = await fetch(`${API_URL}/championships`);
+        if (!response.ok) {
+            console.error('Failed to fetch championships');
+            return;
+        }
+        const championships = await response.json();
+        const grid = document.getElementById('championships-grid');
+        grid.innerHTML = ''; // Limpa o grid
+
+        if (championships.length === 0) {
+            grid.innerHTML = '<p>Nenhum campeonato cadastrado ainda.</p>';
+            return;
+        }
+
+        championships.forEach(champ => {
+            const date = new Date(champ.date).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+            const card = document.createElement('div');
+            card.className = 'event-card';
+            card.innerHTML = `
+                <div class="event-image">
+                    <img src="${champ.image}" alt="${champ.name}">
+                </div>
+                <div class="event-info">
+                    <h3>${champ.name}</h3>
+                    <div class="event-meta">
+                        <span><i class="fas fa-calendar"></i> ${date}</span>
+                        <span><i class="fas fa-map-marker-alt"></i> ${champ.place}</span>
+                    </div>
+                    <div class="event-status open">Inscrições Abertas</div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+
+    } catch (error) {
+        console.error('Error loading championships:', error);
+    }
+}
+
 // Check for saved user on page load
 window.addEventListener('load', () => {
     const savedUser = localStorage.getItem('gridboard_user');
@@ -188,6 +229,8 @@ window.addEventListener('load', () => {
         currentUser = JSON.parse(savedUser);
         updateUIAfterLogin(currentUser);
     }
+
+    loadChampionships();
 });
 
 // --- Modal Tab Switching ---
