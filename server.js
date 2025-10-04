@@ -3,6 +3,8 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const app = express();
@@ -21,7 +23,9 @@ const UserSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    registeredChampionships: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Championship' }]
+    registeredChampionships: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Championship' }],
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 });
 
 const ChampionshipSchema = new mongoose.Schema({
@@ -108,14 +112,55 @@ app.post('/auth/login', async (req, res) => {
 
 // Forgot Password Route (Simulated)
 app.post('/auth/forgot-password', async (req, res) => {
-    const { email } = req.body;
-    const user = await User.findOne({ email });
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) {
+            // Respond generically even if user not found for security
+            return res.status(200).send('If an account with this email exists, a password reset link has been sent.');
+        }
 
-    if (user) {
-        console.log(`Password reset requested for: ${email}`);
+        // Generate token
+        const token = crypto.randomBytes(20).toString('hex');
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+        await user.save();
+
+        // For development, we'll log the reset link instead of emailing it.
+        // In production, you would configure a real email transport.
+        const resetURL = `http://localhost:3000/reset-password.html?token=${token}`;
+        console.log(`Password reset link: ${resetURL}`);
+
+        res.status(200).send('If an account with this email exists, a password reset link has been sent.');
+
+    } catch (error) {
+        res.status(500).send('Error processing password reset.');
     }
-    // Always send a generic success message for security reasons
-    res.status(200).send('If an account with this email exists, a password reset link has been sent.');
+});
+
+app.post('/auth/reset-password', async (req, res) => {
+    try {
+        const { token, password } = req.body;
+        const user = await User.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            return res.status(400).send('Password reset token is invalid or has expired.');
+        }
+
+        // Set new password
+        user.password = await bcrypt.hash(password, saltRounds);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
+
+        res.status(200).send('Password has been updated successfully.');
+
+    } catch (error) {
+        res.status(500).send('Error resetting password.');
+    }
 });
 
 // Championship Registration Route
