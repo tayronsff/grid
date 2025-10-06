@@ -303,7 +303,7 @@ function initGooglePlaces() {
     const input = document.getElementById('champ-place');
     if (input) {
         const autocomplete = new google.maps.places.Autocomplete(input, {
-            types: ['(cities)'], // Restrict to cities for cleaner data
+            types: ['establishment'], // Suggest specific places/businesses
             componentRestrictions: { country: 'br' } // Restrict to Brazil
         });
         autocomplete.setFields(['formatted_address']);
