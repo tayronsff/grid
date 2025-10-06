@@ -1,6 +1,8 @@
 // GridBoard App Logic
 
 // --- Constants and State ---
+const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dew1zfaiw/image/upload';
+const CLOUDINARY_UPLOAD_PRESET = 'profile_pics';
 const API_URL = 'https://gridboard.onrender.com';
 let currentUser = null;
 const screens = [
@@ -57,6 +59,28 @@ function updateUIAfterLogin(user) {
     sideMenu.querySelector('.user-avatar').src = user.picture || `https://i.pravatar.cc/50?u=${user._id}`;
     sideMenu.querySelector('.user-name').textContent = user.name;
     sideMenu.querySelector('.user-email').textContent = user.email;
+}
+
+// --- Cloudinary Upload ---
+async function uploadToCloudinary(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+    try {
+        const response = await fetch(CLOUDINARY_URL, {
+            method: 'POST',
+            body: formData
+        });
+        if (!response.ok) {
+            throw new Error('Cloudinary upload failed.');
+        }
+        const data = await response.json();
+        return data.secure_url;
+    } catch (error) {
+        console.error('Cloudinary Error:', error);
+        return null;
+    }
 }
 
 // --- Data Loading ---
@@ -179,11 +203,40 @@ function setupFormListeners() {
         }
     });
 
+    // Image Preview Listeners
+    document.getElementById('profile-file-input').addEventListener('change', (e) => {
+        const preview = document.getElementById('profile-preview');
+        const file = e.target.files[0];
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+        }
+    });
+
+    document.getElementById('champ-file-input').addEventListener('change', (e) => {
+        const preview = document.getElementById('champ-preview');
+        const file = e.target.files[0];
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+        }
+    });
+
     // Create Championship Form
     document.getElementById('create-championship-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const form = e.target;
-        const data = { name: form.name.value, date: form.date.value, place: form.place.value, image: form.image.value };
+        const fileInput = document.getElementById('champ-file-input');
+        let imageUrl = '';
+
+        if (fileInput.files[0]) {
+            imageUrl = await uploadToCloudinary(fileInput.files[0]);
+            if (!imageUrl) {
+                return alert('Erro ao fazer upload da imagem de capa.');
+            }
+        }
+
+        const data = { name: form.name.value, date: form.date.value, place: form.place.value, image: imageUrl };
         try {
             const response = await fetch(`${API_URL}/championships`, {
                 method: 'POST',
@@ -204,10 +257,21 @@ function setupFormListeners() {
     document.getElementById('profile-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!currentUser) return;
+
+        const fileInput = document.getElementById('profile-file-input');
+        let imageUrl = currentUser.picture; // Keep old image if none is selected
+
+        if (fileInput.files[0]) {
+            imageUrl = await uploadToCloudinary(fileInput.files[0]);
+            if (!imageUrl) {
+                return alert('Erro ao fazer upload da imagem de perfil.');
+            }
+        }
+
         const data = {
             name: document.getElementById('profile-form-name').value,
             email: document.getElementById('profile-form-email').value,
-            picture: document.getElementById('profile-picture-url').value
+            picture: imageUrl
         };
         try {
             const response = await fetch(`${API_URL}/users/${currentUser._id}`, {

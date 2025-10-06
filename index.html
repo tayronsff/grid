@@ -468,8 +468,10 @@
                 </div>
 
                 <div class="input-group">
-                    <label for="profile-picture-url">URL da Imagem de Perfil</label>
-                    <input type="url" id="profile-picture-url" placeholder="https://exemplo.com/sua-foto.jpg">
+                    <label for="profile-file-input">Imagem de Perfil</label>
+                    <input type="file" id="profile-file-input" accept="image/*" style="display: none;">
+                    <button type="button" class="btn-secondary" onclick="document.getElementById('profile-file-input').click();">Escolher Arquivo</button>
+                    <img id="profile-preview" src="" alt="Pré-visualização" style="max-width: 100px; margin-top: 10px; display: none;">
                 </div>
 
                 <div class="input-group">
@@ -517,8 +519,10 @@
             </div>
 
             <div class="input-group">
-                <label for="champ-image">URL da Imagem de Capa</label>
-                <input type="url" id="champ-image" name="image" placeholder="https://exemplo.com/imagem.jpg" required>
+                <label for="champ-file-input">Imagem de Capa</label>
+                <input type="file" id="champ-file-input" name="image-file" accept="image/*" style="display: none;">
+                <button type="button" class="btn-secondary" onclick="document.getElementById('champ-file-input').click();">Escolher Arquivo</button>
+                <img id="champ-preview" src="" alt="Pré-visualização da Capa" style="max-width: 200px; margin-top: 10px; display: none;">
             </div>
 
             <div class="form-actions">
