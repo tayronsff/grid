@@ -235,6 +235,16 @@ function populateProfileForm() {
     document.getElementById('profile-form-email').value = currentUser.email;
 }
 
+function initGooglePlaces() {
+    const input = document.getElementById('champ-place');
+    if (input) {
+        const autocomplete = new google.maps.places.Autocomplete(input, {
+            types: ['(cities)'] // Restrict to cities for cleaner data
+        });
+        autocomplete.setFields(['formatted_address']);
+    }
+}
+
 // --- App Initialization ---
 window.addEventListener('DOMContentLoaded', () => {
     const savedUser = localStorage.getItem('gridboard_user');
@@ -244,4 +254,5 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     loadChampionships();
     setupFormListeners();
+    initGooglePlaces();
 });
