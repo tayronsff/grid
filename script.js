@@ -294,7 +294,6 @@ function setupFormListeners() {
 function populateProfileForm() {
     if (!currentUser) return;
     document.getElementById('profile-avatar-img').src = currentUser.picture || `https://i.pravatar.cc/120?u=${currentUser._id}`;
-    document.getElementById('profile-picture-url').value = currentUser.picture || '';
     document.getElementById('profile-form-name').value = currentUser.name;
     document.getElementById('profile-form-email').value = currentUser.email;
 }
