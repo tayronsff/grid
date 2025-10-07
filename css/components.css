@@ -7,7 +7,7 @@
 .header-search .search-bar{display:flex;align-items:center;gap:10px;background:var(--bg-elev);padding:10px 12px;border:1px solid var(--line);border-radius:8px;min-width:40vw}
 .header-search input{background:transparent;border:0;outline:0;width:100%}
 .header-user .user-info{display:flex;align-items:center;gap:10px}
-.user-avatar{width:36px;height:36px;border-radius:50%;border:2px solid #222}
+.user-avatar{width:36px;height:36px;border-radius:50%;border:2px solid #222;object-fit:cover;}
 .btn-menu{background:var(--bg-elev);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
 
 /* Buttons */
@@ -42,7 +42,7 @@ textarea{resize:vertical}
 .event-card:hover{ transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--grad-start); }
 .event-card.small{padding:12px;align-items:center}
 .event-card.featured{border-image:linear-gradient(90deg, var(--grad-start), var(--grad-end)) 1;}
-.event-image img{width:100%;height:150px;object-fit:cover}
+.event-image img{width:100%;height:150px;object-fit:cover;}
 .event-info{padding:12px 14px}
 .event-info h3,.event-info h4{margin:0 0 6px}
 .event-meta{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:.9rem}
@@ -103,7 +103,7 @@ textarea{resize:vertical}
 /* Profile */
 .profile-content{padding:20px 0}
 .avatar-container{position:relative;width:120px;height:120px}
-.profile-avatar{width:120px;height:120px;border-radius:50%;border:3px solid #222}
+.profile-avatar{width:120px;height:120px;border-radius:50%;border:3px solid #222;object-fit:cover;}
 .btn-change-avatar{position:absolute;right:0;bottom:0;background:#1e2128;border:1px solid var(--line);color:#fff;border-radius:999px;width:40px;height:40px;display:grid;place-items:center}
 
 /* Forms */
@@ -196,6 +196,7 @@ textarea{resize:vertical}
     border-radius: 50%;
     cursor: pointer;
     border: 2px solid var(--line);
+    object-fit: cover;
 }
 
 .dropdown-content {
