@@ -25,13 +25,19 @@
                 <a href="#" onclick="showScreen('home-screen')">Início</a>
                 <a href="#" onclick="showScreen('events-screen')">Eventos</a>
                 <a href="#" onclick="showScreen('favorites-screen')">Meus Eventos</a>
-                <a href="#" onclick="showScreen('profile-screen')">Perfil</a>
             </nav>
             <div class="site-actions">
-                <button class="btn-secondary cta-login" onclick="openLoginModal()">
+                <button id="desktop-login-btn" class="btn-secondary cta-login" onclick="openLoginModal()">
                     <i class="fas fa-user"></i>
                     Entrar
                 </button>
+                <div id="desktop-user-profile" class="profile-dropdown" style="display: none;">
+                    <img id="desktop-avatar" src="" alt="User Avatar" class="user-avatar-sm">
+                    <div class="dropdown-content">
+                        <a href="#" onclick="showScreen('profile-screen')">Meu Perfil</a>
+                        <a href="#" onclick="logout()">Sair</a>
+                    </div>
+                </div>
             </div>
         </div>
     </header>

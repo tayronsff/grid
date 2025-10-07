@@ -49,12 +49,20 @@ function closeLoginModal() {
 }
 
 function updateUIAfterLogin(user) {
+    // Mobile header
     document.querySelector('.cta-login').style.display = 'none';
     const headerUser = document.getElementById('header-logged');
     headerUser.style.display = 'flex';
     headerUser.querySelector('.user-avatar').src = user.picture || `https://i.pravatar.cc/40?u=${user._id}`;
     headerUser.querySelector('.user-name').textContent = user.name.split(' ')[0];
 
+    // Desktop header
+    document.getElementById('desktop-login-btn').style.display = 'none';
+    const desktopProfile = document.getElementById('desktop-user-profile');
+    desktopProfile.style.display = 'inline-block';
+    document.getElementById('desktop-avatar').src = user.picture || `https://i.pravatar.cc/40?u=${user._id}`;
+
+    // Side menu
     const sideMenu = document.getElementById('side-menu');
     sideMenu.querySelector('.user-avatar').src = user.picture || `https://i.pravatar.cc/50?u=${user._id}`;
     sideMenu.querySelector('.user-name').textContent = user.name;
@@ -122,8 +130,15 @@ async function loadChampionships() {
 function logout() {
     currentUser = null;
     localStorage.removeItem('gridboard_user');
+    
+    // Mobile header
     document.querySelector('.cta-login').style.display = 'inline-flex';
     document.getElementById('header-logged').style.display = 'none';
+
+    // Desktop header
+    document.getElementById('desktop-login-btn').style.display = 'inline-flex';
+    document.getElementById('desktop-user-profile').style.display = 'none';
+
     showScreen('home-screen');
 }
 
