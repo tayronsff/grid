@@ -223,6 +223,11 @@ app.put('/users/:id', async (req, res) => {
     }
 });
 
+// Endpoint to provide frontend configuration
+app.get('/api/config', (req, res) => {
+    res.json({ googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY });
+});
+
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });

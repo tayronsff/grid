@@ -310,6 +310,28 @@ function initGooglePlaces() {
     }
 }
 
+async function loadGoogleMaps() {
+    try {
+        const response = await fetch(`${API_URL}/api/config`);
+        const config = await response.json();
+        const apiKey = config.googleMapsApiKey;
+
+        if (apiKey) {
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+            script.onload = () => {
+                // Now that the script is loaded, we can initialize places
+                initGooglePlaces();
+            };
+            document.head.appendChild(script);
+        } else {
+            console.error('Google Maps API key not found.');
+        }
+    } catch (error) {
+        console.error('Failed to load Google Maps config:', error);
+    }
+}
+
 // --- App Initialization ---
 window.addEventListener('DOMContentLoaded', () => {
     const savedUser = localStorage.getItem('gridboard_user');
@@ -319,5 +341,5 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     loadChampionships();
     setupFormListeners();
-    initGooglePlaces();
+    loadGoogleMaps(); // This will call initGooglePlaces upon success
 });
