@@ -167,6 +167,18 @@ app.get('/users/:userId/championships', async (req, res) => {
 });
 
 // --- Championship Routes ---
+app.get('/championships/:id', async (req, res) => {
+    try {
+        const champ = await Championship.findById(req.params.id);
+        if (!champ) {
+            return res.status(404).send('Championship not found.');
+        }
+        res.status(200).json(champ);
+    } catch (error) {
+        res.status(500).send('Error fetching championship.');
+    }
+});
+
 app.get('/championships', async (req, res) => {
     try {
         const championships = await Championship.find({});

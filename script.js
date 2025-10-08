@@ -487,11 +487,55 @@ function generateStageFields(count) {
 }
 
 async function editChampionship(champId) {
-    // This function would fetch the championship details and populate the form
-    // For now, we'll just show the screen
-    showScreen('create-championship-screen');
-    // In a real scenario, you'd fetch champ data and call a populate function
-    alert('Funcionalidade de edição em breve! Preencha o formulário para criar um novo.');
+    try {
+        const response = await fetch(`${API_URL}/championships/${champId}`); // Note: This assumes a GET /championships/:id route exists
+        if (!response.ok) throw new Error('Failed to fetch championship details.');
+
+        const champ = await response.json();
+
+        // --- Populate Form ---
+        document.getElementById('champ-id').value = champ._id;
+        document.getElementById('champ-name').value = champ.name;
+        document.getElementById('champ-organizer').value = champ.organizer;
+        document.getElementById('champ-date').value = new Date(champ.date).toISOString().split('T')[0]; // Format date for input
+        document.getElementById('champ-contact-phone').value = champ.contactPhone;
+        document.getElementById('champ-contact-email').value = champ.contactEmail;
+        document.getElementById('champ-place').value = champ.place;
+
+        // State and City
+        const stateSelect = document.getElementById('champ-state');
+        stateSelect.value = champ.state;
+        await populateCities(champ.state); // Await to ensure cities are loaded before setting value
+        document.getElementById('champ-city').value = champ.city;
+
+        // Image Preview
+        const preview = document.getElementById('champ-preview');
+        if (champ.image) {
+            preview.src = champ.image;
+            preview.style.display = 'block';
+        }
+
+        // Stages
+        const numStages = champ.stages.length;
+        document.getElementById('champ-num-stages').value = numStages;
+        generateStageFields(numStages);
+
+        // Use a slight delay to ensure fields are rendered before populating
+        setTimeout(() => {
+            champ.stages.forEach((stage, i) => {
+                const stageIndex = i + 1;
+                document.getElementById(`stage-name-${stageIndex}`).value = stage.name;
+                document.getElementById(`stage-date-${stageIndex}`).value = new Date(stage.date).toISOString().split('T')[0];
+                document.getElementById(`stage-location-${stageIndex}`).value = stage.location;
+            });
+        }, 100);
+
+        showScreen('create-championship-screen');
+
+    } catch (error) {
+        console.error('Error editing championship:', error);
+        alert('Não foi possível carregar os dados do campeonato para edição.');
+    }
 }
 
 
