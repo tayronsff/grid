@@ -494,6 +494,17 @@
                     Salvar Alterações
                 </button>
             </form>
+
+            <hr class="form-divider">
+
+            <div class="user-championships-section">
+                <h3>Meus Campeonatos Criados</h3>
+                <div id="created-championships-list"></div>
+                <button class="btn-primary" onclick="showScreen('create-championship-screen')" style="margin-top: 12px;">
+                    <i class="fas fa-plus"></i>
+                    Criar Novo Campeonato
+                </button>
+            </div>
         </div>
     </div>
 
@@ -507,6 +518,8 @@
         </header>
 
         <form id="create-championship-form" class="create-form page-container">
+            <input type="hidden" id="champ-id" name="id"> <!-- For editing -->
+
             <div class="input-group">
                 <label for="champ-name">Nome do Campeonato</label>
                 <input type="text" id="champ-name" name="name" required>
@@ -514,13 +527,40 @@
 
             <div class="input-row">
                 <div class="input-group">
-                    <label for="champ-date">Data</label>
-                    <input type="date" id="champ-date" name="date" required>
+                    <label for="champ-organizer">Organizador</label>
+                    <input type="text" id="champ-organizer" name="organizer" required>
                 </div>
                 <div class="input-group">
-                    <label for="champ-place">Local</label>
-                    <input type="text" id="champ-place" name="place" required>
+                    <label for="champ-date">Data de Início</label>
+                    <input type="date" id="champ-date" name="date" required>
                 </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="champ-contact-phone">Telefone de Contato</label>
+                    <input type="tel" id="champ-contact-phone" name="contactPhone" placeholder="(XX) XXXXX-XXXX">
+                </div>
+                <div class="input-group">
+                    <label for="champ-contact-email">E-mail de Contato</label>
+                    <input type="email" id="champ-contact-email" name="contactEmail">
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="champ-state">Estado</label>
+                    <select id="champ-state" name="state"></select>
+                </div>
+                <div class="input-group">
+                    <label for="champ-city">Cidade</label>
+                    <select id="champ-city" name="city" disabled></select>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="champ-place">Local (Kartódromo)</label>
+                <input type="text" id="champ-place" name="place" required>
             </div>
 
             <div class="input-group">
@@ -529,6 +569,15 @@
                 <button type="button" class="btn-secondary" onclick="document.getElementById('champ-file-input').click();">Escolher Arquivo</button>
                 <img id="champ-preview" src="" alt="Pré-visualização da Capa" style="max-width: 200px; margin-top: 10px; display: none;">
             </div>
+
+            <hr class="form-divider">
+
+            <div class="input-group">
+                <label for="champ-num-stages">Número de Etapas</label>
+                <input type="number" id="champ-num-stages" name="num-stages" min="0" placeholder="0">
+            </div>
+
+            <div id="dynamic-stages-container"></div>
 
             <div class="form-actions">
                 <button type="submit" class="btn-primary">Salvar Campeonato</button>

@@ -237,7 +237,16 @@ function setupFormListeners() {
         }
     });
 
-    // Create Championship Form
+    document.getElementById('champ-state').addEventListener('change', (e) => {
+        populateCities(e.target.value);
+    });
+
+    document.getElementById('champ-num-stages').addEventListener('input', (e) => {
+        const count = parseInt(e.target.value, 10) || 0;
+        generateStageFields(count);
+    });
+
+    // Create/Update Championship Form
     document.getElementById('create-championship-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const form = e.target;
@@ -251,17 +260,50 @@ function setupFormListeners() {
             }
         }
 
-        const data = { name: form.name.value, date: form.date.value, place: form.place.value, image: imageUrl };
+        const stages = [];
+        const numStages = parseInt(document.getElementById('champ-num-stages').value, 10) || 0;
+        for (let i = 0; i < numStages; i++) {
+            const stageIndex = i + 1;
+            // We would also handle stage image uploads here in a real scenario
+            stages.push({
+                name: document.getElementById(`stage-name-${stageIndex}`).value,
+                date: document.getElementById(`stage-date-${stageIndex}`).value,
+                location: document.getElementById(`stage-location-${stageIndex}`).value,
+            });
+        }
+
+        const data = {
+            name: document.getElementById('champ-name').value,
+            organizer: document.getElementById('champ-organizer').value,
+            date: document.getElementById('champ-date').value,
+            contactPhone: document.getElementById('champ-contact-phone').value,
+            contactEmail: document.getElementById('champ-contact-email').value,
+            state: document.getElementById('champ-state').value,
+            city: document.getElementById('champ-city').value,
+            place: document.getElementById('champ-place').value,
+            image: imageUrl,
+            stages: stages,
+            creator: currentUser._id // Add creator ID
+        };
+
         try {
-            const response = await fetch(`${API_URL}/championships`, {
-                method: 'POST',
+            const champId = document.getElementById('champ-id').value;
+            const isEditing = !!champId;
+            const url = isEditing ? `${API_URL}/championships/${champId}` : `${API_URL}/championships`;
+            const method = isEditing ? 'PUT' : 'POST';
+
+            if(isEditing) data.userId = currentUser._id; // Add userId for authorization on update
+
+            const response = await fetch(url, {
+                method: method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
             if (!response.ok) throw new Error('Erro ao cadastrar campeonato.');
-            alert('Campeonato cadastrado com sucesso!');
+            alert(`Campeonato ${isEditing ? 'atualizado' : 'cadastrado'} com sucesso!`);
             form.reset();
-            showScreen('home-screen');
+            document.getElementById('dynamic-stages-container').innerHTML = ''; // Clear stages
+            showScreen('profile-screen'); // Go to profile to see the list
             loadChampionships(); // Refresh list
         } catch (error) {
             alert(error.message);
@@ -306,11 +348,34 @@ function setupFormListeners() {
     });
 }
 
-function populateProfileForm() {
+async function populateProfileForm() {
     if (!currentUser) return;
     document.getElementById('profile-avatar-img').src = currentUser.picture || `https://i.pravatar.cc/120?u=${currentUser._id}`;
     document.getElementById('profile-form-name').value = currentUser.name;
     document.getElementById('profile-form-email').value = currentUser.email;
+
+    // Load and display user's created championships
+    try {
+        const response = await fetch(`${API_URL}/users/${currentUser._id}/championships`);
+        const championships = await response.json();
+        const container = document.getElementById('created-championships-list');
+        container.innerHTML = ''; // Clear previous list
+        if (championships.length > 0) {
+            championships.forEach(champ => {
+                const champElement = document.createElement('div');
+                champElement.className = 'user-championship-item';
+                champElement.innerHTML = `
+                    <span>${champ.name}</span>
+                    <button class="btn-secondary btn-sm" onclick="editChampionship('${champ._id}')">Editar</button>
+                `;
+                container.appendChild(champElement);
+            });
+        } else {
+            container.innerHTML = '<p>Você ainda não criou nenhum campeonato.</p>';
+        }
+    } catch (error) {
+        console.error('Failed to load created championships:', error);
+    }
 }
 
 function initGooglePlaces() {
@@ -346,6 +411,90 @@ async function loadGoogleMaps() {
     }
 }
 
+// --- Championship Form Logic ---
+async function populateStates() {
+    const stateSelect = document.getElementById('champ-state');
+    try {
+        const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome');
+        const states = await response.json();
+        stateSelect.innerHTML = '<option value="">Selecione o Estado</option>';
+        states.forEach(state => {
+            const option = document.createElement('option');
+            option.value = state.sigla;
+            option.textContent = state.nome;
+            stateSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Failed to load states:', error);
+    }
+}
+
+async function populateCities(state) {
+    const citySelect = document.getElementById('champ-city');
+    citySelect.disabled = true;
+    citySelect.innerHTML = '<option value="">Carregando...</option>';
+    if (!state) {
+        citySelect.innerHTML = '<option value="">Selecione um estado primeiro</option>';
+        return;
+    }
+    try {
+        const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state}/municipios?orderBy=nome`);
+        const cities = await response.json();
+        citySelect.innerHTML = '<option value="">Selecione a Cidade</option>';
+        cities.forEach(city => {
+            const option = document.createElement('option');
+            option.value = city.nome;
+            option.textContent = city.nome;
+            citySelect.appendChild(option);
+        });
+        citySelect.disabled = false;
+    } catch (error) {
+        console.error('Failed to load cities:', error);
+    }
+}
+
+function generateStageFields(count) {
+    const container = document.getElementById('dynamic-stages-container');
+    container.innerHTML = '';
+    for (let i = 0; i < count; i++) {
+        const stageIndex = i + 1;
+        const stageEl = document.createElement('div');
+        stageEl.className = 'stage-form-group';
+        stageEl.innerHTML = `
+            <h4>Etapa ${stageIndex}</h4>
+            <div class="input-group">
+                <label for="stage-name-${stageIndex}">Nome da Etapa</label>
+                <input type="text" id="stage-name-${stageIndex}" required>
+            </div>
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="stage-date-${stageIndex}">Data</label>
+                    <input type="date" id="stage-date-${stageIndex}" required>
+                </div>
+                <div class="input-group">
+                    <label for="stage-location-${stageIndex}">Local</label>
+                    <input type="text" id="stage-location-${stageIndex}" required>
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="stage-file-input-${stageIndex}">Imagem da Etapa (Opcional)</label>
+                <input type="file" id="stage-file-input-${stageIndex}" accept="image/*" style="display: none;">
+                <button type="button" class="btn-secondary btn-sm" onclick="document.getElementById('stage-file-input-${stageIndex}').click();">Escolher Arquivo</button>
+            </div>
+        `;
+        container.appendChild(stageEl);
+    }
+}
+
+async function editChampionship(champId) {
+    // This function would fetch the championship details and populate the form
+    // For now, we'll just show the screen
+    showScreen('create-championship-screen');
+    // In a real scenario, you'd fetch champ data and call a populate function
+    alert('Funcionalidade de edição em breve! Preencha o formulário para criar um novo.');
+}
+
+
 // --- App Initialization ---
 window.addEventListener('DOMContentLoaded', () => {
     const savedUser = localStorage.getItem('gridboard_user');
@@ -356,4 +505,5 @@ window.addEventListener('DOMContentLoaded', () => {
     loadChampionships();
     setupFormListeners();
     loadGoogleMaps(); // This will call initGooglePlaces upon success
+    populateStates();
 });
