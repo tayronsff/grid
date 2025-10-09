@@ -241,9 +241,8 @@ function setupFormListeners() {
         populateCities(e.target.value);
     });
 
-    document.getElementById('champ-num-stages').addEventListener('input', (e) => {
-        const count = parseInt(e.target.value, 10) || 0;
-        generateStageFields(count);
+    document.getElementById('add-stage-btn').addEventListener('click', () => {
+        addStageField();
     });
 
     // Create/Update Championship Form
@@ -261,16 +260,14 @@ function setupFormListeners() {
         }
 
         const stages = [];
-        const numStages = parseInt(document.getElementById('champ-num-stages').value, 10) || 0;
-        for (let i = 0; i < numStages; i++) {
-            const stageIndex = i + 1;
-            // We would also handle stage image uploads here in a real scenario
+        const stageElements = document.querySelectorAll('.stage-form-group');
+        stageElements.forEach(stageEl => {
             stages.push({
-                name: document.getElementById(`stage-name-${stageIndex}`).value,
-                date: document.getElementById(`stage-date-${stageIndex}`).value,
-                location: document.getElementById(`stage-location-${stageIndex}`).value,
+                name: stageEl.querySelector('input[id^="stage-name-"]').value,
+                date: stageEl.querySelector('input[id^="stage-date-"]').value,
+                location: stageEl.querySelector('input[id^="stage-location-"]').value,
             });
-        }
+        });
 
         const data = {
             name: document.getElementById('champ-name').value,
@@ -453,46 +450,51 @@ async function populateCities(state) {
     }
 }
 
-function generateStageFields(count) {
+function addStageField() {
+    const container = document.getElementById('dynamic-stages-container');
+    const stageIndex = container.children.length + 1;
+    const stageEl = document.createElement('div');
+    stageEl.className = 'stage-form-group';
+    stageEl.innerHTML = `
+        <h4>Etapa ${stageIndex}</h4>
+        <div class="input-group">
+            <label for="stage-name-${stageIndex}">Nome da Etapa</label>
+            <input type="text" id="stage-name-${stageIndex}" required>
+        </div>
+        <div class="input-row">
+            <div class="input-group">
+                <label for="stage-date-${stageIndex}">Data</label>
+                <input type="date" id="stage-date-${stageIndex}" required>
+            </div>
+            <div class="input-group">
+                <label for="stage-location-${stageIndex}">Local</label>
+                <input type="text" id="stage-location-${stageIndex}" required>
+            </div>
+        </div>
+    `;
+    container.appendChild(stageEl);
+}
+
+// Resets the championship form to its initial state (with one stage)
+function resetAndPrepareChampForm() {
+    const form = document.getElementById('create-championship-form');
+    form.reset();
+    document.getElementById('champ-id').value = ''; // Clear ID for new entry
+    document.getElementById('champ-preview').style.display = 'none'; // Hide preview
+    document.getElementById('champ-preview').src = '';
+
     const container = document.getElementById('dynamic-stages-container');
     container.innerHTML = '';
-    for (let i = 0; i < count; i++) {
-        const stageIndex = i + 1;
-        const stageEl = document.createElement('div');
-        stageEl.className = 'stage-form-group';
-        stageEl.innerHTML = `
-            <h4>Etapa ${stageIndex}</h4>
-            <div class="input-group">
-                <label for="stage-name-${stageIndex}">Nome da Etapa</label>
-                <input type="text" id="stage-name-${stageIndex}" required>
-            </div>
-            <div class="input-row">
-                <div class="input-group">
-                    <label for="stage-date-${stageIndex}">Data</label>
-                    <input type="date" id="stage-date-${stageIndex}" required>
-                </div>
-                <div class="input-group">
-                    <label for="stage-location-${stageIndex}">Local</label>
-                    <input type="text" id="stage-location-${stageIndex}" required>
-                </div>
-            </div>
-            <div class="input-group">
-                <label for="stage-file-input-${stageIndex}">Imagem da Etapa (Opcional)</label>
-                <input type="file" id="stage-file-input-${stageIndex}" accept="image/*" style="display: none;">
-                <button type="button" class="btn-secondary btn-sm" onclick="document.getElementById('stage-file-input-${stageIndex}').click();">Escolher Arquivo</button>
-            </div>
-        `;
-        container.appendChild(stageEl);
-    }
+    addStageField(); // Add the first stage automatically
+    showScreen('create-championship-screen');
 }
 
 async function editChampionship(champId) {
     try {
-        const response = await fetch(`${API_URL}/championships/${champId}`); // Note: This assumes a GET /championships/:id route exists
-        if (!response.ok) throw new Error('Failed to fetch championship details.');
+            const response = await fetch(`${API_URL}/championships/${champId}`); // Note: This assumes a GET /championships/:id route exists
+            if (!response.ok) throw new Error('Failed to fetch championship details.');
 
-        const champ = await response.json();
-
+            const champ = await response.json();
         // --- Populate Form ---
         document.getElementById('champ-id').value = champ._id;
         document.getElementById('champ-name').value = champ.name;
@@ -516,9 +518,13 @@ async function editChampionship(champId) {
         }
 
         // Stages
-        const numStages = champ.stages.length;
-        document.getElementById('champ-num-stages').value = numStages;
-        generateStageFields(numStages);
+        const container = document.getElementById('dynamic-stages-container');
+        container.innerHTML = ''; // Clear before adding
+        if (champ.stages && champ.stages.length > 0) {
+            champ.stages.forEach(() => addStageField());
+        } else {
+            addStageField(); // Add one if there are no stages
+        }
 
         // Use a slight delay to ensure fields are rendered before populating
         setTimeout(() => {
@@ -537,6 +543,7 @@ async function editChampionship(champId) {
         alert('Não foi possível carregar os dados do campeonato para edição.');
     }
 }
+
 
 
 // --- App Initialization ---

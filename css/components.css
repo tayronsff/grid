@@ -25,7 +25,7 @@
 .btn-add-stage{background:#172028;color:#cde9ff;border:1px solid #223140;border-radius:12px;padding:10px 12px}
 
 /* Inputs */
-.input-group{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.input-group{display:flex;flex-direction:column;gap:8px;margin-bottom: 20px;}
 .input-row{display:flex;gap:12px}
 .input-row .input-group{flex:1}
 textarea{resize:vertical}
@@ -183,6 +183,20 @@ textarea{resize:vertical}
 .modal-email-form .input-group{ position:relative; }
 .modal-email-form .input-group i{ position:absolute; left:12px; top:50%; transform:translateY(-50%); color: var(--muted); }
 .modal-email-form .input-group input{ padding:12px 12px 12px 36px; }
+
+/* Stage Form Group */
+.stage-form-group {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.stage-form-group h4 {
+    margin-top: 0;
+    margin-bottom: 24px;
+}
 
 /* Profile Dropdown */
 .profile-dropdown {

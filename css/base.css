@@ -36,7 +36,12 @@ h1,h2,h3,h4 {
 
 img { max-width: 100%; display: block; }
 button { font: inherit; color: inherit; cursor: pointer; }
-input, textarea { font: inherit; color: var(--text); background: var(--bg-elev); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+input, textarea, select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font: inherit; color: var(--text); background: var(--bg-elev); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px;
+}
 label { display:block; margin: 0 0 .35rem; color: var(--muted); font-size: .9rem; }
 
 .screen { display: none; min-height: 100dvh; }
