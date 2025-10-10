@@ -110,61 +110,21 @@
             <div class="page-container">
             <section class="hero-section">
                 <div class="section-header">
-                    <h2>Campeonatos de Kart</h2>
-                    <button class="link-cta" onclick="navigateToEventsWithFilter('kart')">Ver todos</button>
+                    <h2>Próximas Etapas</h2>
+                    <button class="link-cta" onclick="showScreen('events-screen')">Ver todas</button>
                 </div>
-                <div class="events-grid" id="championships-grid">
-                    <!-- Campeonatos serão carregados aqui -->
+                <div class="events-grid" id="upcoming-stages-grid">
+                    <!-- Próximas etapas serão carregadas aqui -->
                 </div>
             </section>
 
             <section class="other-events-section">
                 <div class="section-header">
-                    <h2>Outros Eventos</h2>
-                    <button class="link-cta" onclick="navigateToEventsWithFilter('all')">Ver todos</button>
+                    <h2>Campeonatos</h2>
+                    <button class="link-cta" onclick="showScreen('events-screen')">Ver todos</button>
                 </div>
-                <div class="events-grid">
-                    <div class="event-card" data-type="track-day">
-                        <div class="event-image">
-                            <img src="https://images.unsplash.com/photo-1465447142348-e9952c393450?auto=format&fit=crop&w=1200&q=60" alt="Track Day Interlagos">
-                        </div>
-                        <div class="event-info">
-                            <h3>Track Day Interlagos</h3>
-                            <div class="event-meta">
-                                <span><i class="fas fa-calendar"></i> 28 Set 2024</span>
-                                <span><i class="fas fa-map-marker-alt"></i> São Paulo</span>
-                            </div>
-                            <div class="event-status upcoming">Próximo Evento</div>
-                        </div>
-                    </div>
-
-                    <div class="event-card" data-type="drag">
-                        <div class="event-image">
-                            <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1200&q=60" alt="Drag Race Championship">
-                        </div>
-                        <div class="event-info">
-                            <h3>Drag Race Championship</h3>
-                            <div class="event-meta">
-                                <span><i class="fas fa-calendar"></i> 05 Out 2024</span>
-                                <span><i class="fas fa-map-marker-alt"></i> Curitiba</span>
-                            </div>
-                            <div class="event-status open">Inscrições Abertas</div>
-                        </div>
-                    </div>
-
-                    <div class="event-card" data-type="drift">
-                        <div class="event-image">
-                            <img src="https://images.unsplash.com/photo-1558980664-10e7170b5c46?auto=format&fit=crop&w=1200&q=60" alt="Drift Battle SP">
-                        </div>
-                        <div class="event-info">
-                            <h3>Drift Battle SP</h3>
-                            <div class="event-meta">
-                                <span><i class="fas fa-calendar"></i> 12 Out 2024</span>
-                                <span><i class="fas fa-map-marker-alt"></i> São Paulo</span>
-                            </div>
-                            <div class="event-status upcoming">Próximo Evento</div>
-                        </div>
-                    </div>
+                <div class="events-grid" id="championships-grid">
+                    <!-- Campeonatos serão carregados aqui -->
                 </div>
             </section>
 

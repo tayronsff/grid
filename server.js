@@ -166,6 +166,29 @@ app.get('/users/:userId/championships', async (req, res) => {
     }
 });
 
+// --- Stage Routes ---
+app.get('/stages/upcoming', async (req, res) => {
+    try {
+        const championships = await Championship.find({ 'stages.date': { $gte: new Date() } }).populate('creator', 'name');
+
+        const upcomingStages = championships.flatMap(champ => 
+            champ.stages
+                .filter(stage => stage.date >= new Date())
+                .map(stage => ({
+                    ...stage.toObject(),
+                    championshipName: champ.name,
+                    championshipId: champ._id
+                }))
+        );
+
+        upcomingStages.sort((a, b) => a.date - b.date);
+
+        res.status(200).json(upcomingStages.slice(0, 9));
+    } catch (error) {
+        res.status(500).send('Error fetching upcoming stages.');
+    }
+});
+
 // --- Championship Routes ---
 app.get('/championships/:id', async (req, res) => {
     try {

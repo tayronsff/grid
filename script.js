@@ -92,6 +92,42 @@ async function uploadToCloudinary(file) {
 }
 
 // --- Data Loading ---
+async function loadUpcomingStages() {
+    try {
+        const response = await fetch(`${API_URL}/stages/upcoming`);
+        if (!response.ok) return;
+        const stages = await response.json();
+        const grid = document.getElementById('upcoming-stages-grid');
+        grid.innerHTML = '';
+
+        if (stages.length === 0) {
+            grid.innerHTML = '<p>Nenhuma etapa programada para os próximos dias.</p>';
+            return;
+        }
+
+        stages.forEach(stage => {
+            const date = new Date(stage.date).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+            const card = document.createElement('div');
+            card.className = 'event-card';
+            // Note: We'll need a generic image or use the championship's main image later
+            card.innerHTML = `
+                <div class="event-image"><img src="https://images.unsplash.com/photo-1534214526114-0ea4d57cde2f?auto=format&fit=crop&w=1200&q=60" alt="${stage.name}"></div>
+                <div class="event-info">
+                    <h3>${stage.name}</h3>
+                    <p style="color: var(--muted); margin: -4px 0 8px;">${stage.championshipName}</p>
+                    <div class="event-meta">
+                        <span><i class="fas fa-calendar"></i> ${date}</span>
+                        <span><i class="fas fa-map-marker-alt"></i> ${stage.location}</span>
+                    </div>
+                    <div class="event-status upcoming">Próxima Etapa</div>
+                </div>`;
+            grid.appendChild(card);
+        });
+    } catch (error) {
+        console.error('Error loading upcoming stages:', error);
+    }
+}
+
 async function loadChampionships() {
     try {
         const response = await fetch(`${API_URL}/championships`);
@@ -580,6 +616,7 @@ window.addEventListener('DOMContentLoaded', () => {
         currentUser = JSON.parse(savedUser);
         updateUIAfterLogin(currentUser);
     }
+    loadUpcomingStages();
     loadChampionships();
     setupFormListeners();
     loadGoogleMaps(); // This will call initGooglePlaces upon success
