@@ -242,7 +242,25 @@ function setupFormListeners() {
     });
 
     document.getElementById('add-stage-btn').addEventListener('click', () => {
-        addStageField();
+        addStageField(true); // Pass true to indicate it's a subsequent stage
+    });
+
+    document.getElementById('multi-stage-toggle').addEventListener('change', (e) => {
+        const isMultiStage = e.target.checked;
+        document.getElementById('add-stage-btn-container').style.display = isMultiStage ? 'block' : 'none';
+        
+        const firstStageTitle = document.querySelector('.stage-form-group h4');
+        if (firstStageTitle) {
+            firstStageTitle.textContent = isMultiStage ? 'Etapa 1' : 'Etapa única';
+        }
+
+        // If user toggles off multi-stage, remove extra stages
+        if (!isMultiStage) {
+            const container = document.getElementById('dynamic-stages-container');
+            while (container.children.length > 1) {
+                container.removeChild(container.lastChild);
+            }
+        }
     });
 
     // Create/Update Championship Form
@@ -450,13 +468,15 @@ async function populateCities(state) {
     }
 }
 
-function addStageField() {
+function addStageField(isMulti) {
     const container = document.getElementById('dynamic-stages-container');
     const stageIndex = container.children.length + 1;
+    const title = isMulti ? `Etapa ${stageIndex}` : 'Etapa única';
+
     const stageEl = document.createElement('div');
     stageEl.className = 'stage-form-group';
     stageEl.innerHTML = `
-        <h4>Etapa ${stageIndex}</h4>
+        <h4>${title}</h4>
         <div class="input-group">
             <label for="stage-name-${stageIndex}">Nome da Etapa</label>
             <input type="text" id="stage-name-${stageIndex}" required>
@@ -485,7 +505,9 @@ function resetAndPrepareChampForm() {
 
     const container = document.getElementById('dynamic-stages-container');
     container.innerHTML = '';
-    addStageField(); // Add the first stage automatically
+    addStageField(false); // Add the first stage as 'Etapa única'
+    document.getElementById('multi-stage-toggle').checked = false;
+    document.getElementById('add-stage-btn-container').style.display = 'none';
     showScreen('create-championship-screen');
 }
 
@@ -520,10 +542,15 @@ async function editChampionship(champId) {
         // Stages
         const container = document.getElementById('dynamic-stages-container');
         container.innerHTML = ''; // Clear before adding
+        const isMultiStage = champ.stages && champ.stages.length > 1;
+        const toggle = document.getElementById('multi-stage-toggle');
+        toggle.checked = isMultiStage;
+        document.getElementById('add-stage-btn-container').style.display = isMultiStage ? 'block' : 'none';
+
         if (champ.stages && champ.stages.length > 0) {
-            champ.stages.forEach(() => addStageField());
+            champ.stages.forEach(() => addStageField(isMultiStage));
         } else {
-            addStageField(); // Add one if there are no stages
+            addStageField(false); // Add one stage by default, not as multi
         }
 
         // Use a slight delay to ensure fields are rendered before populating

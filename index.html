@@ -518,67 +518,70 @@
         </header>
 
         <form id="create-championship-form" class="create-form page-container">
-            <input type="hidden" id="champ-id" name="id"> <!-- For editing -->
+            <input type="hidden" id="champ-id" name="id">
 
-            <div class="input-group">
-                <label for="champ-name">Nome do Campeonato</label>
-                <input type="text" id="champ-name" name="name" required>
-            </div>
+            <fieldset class="form-section">
+                <legend>Informações Básicas</legend>
+                <div class="input-group">
+                    <label for="champ-name">Nome do Campeonato</label>
+                    <input type="text" id="champ-name" name="name" required>
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="champ-state">Estado</label>
+                        <select id="champ-state" name="state" required></select>
+                    </div>
+                    <div class="input-group">
+                        <label for="champ-city">Cidade</label>
+                        <select id="champ-city" name="city" disabled required></select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="champ-place">Local (Kartódromo)</label>
+                    <input type="text" id="champ-place" name="place" required>
+                </div>
+                <div class="input-group">
+                    <label for="champ-file-input">Imagem de Capa</label>
+                    <input type="file" id="champ-file-input" name="image-file" accept="image/*" style="display: none;">
+                    <button type="button" class="btn-secondary" onclick="document.getElementById('champ-file-input').click();">Escolher Arquivo</button>
+                    <img id="champ-preview" src="" alt="Pré-visualização da Capa" style="max-width: 200px; margin-top: 10px; display: none;">
+                </div>
+            </fieldset>
 
-            <div class="input-row">
+            <fieldset class="form-section">
+                <legend>Organização e Contato</legend>
                 <div class="input-group">
                     <label for="champ-organizer">Organizador</label>
                     <input type="text" id="champ-organizer" name="organizer" required>
                 </div>
-                <div class="input-group">
-                    <label for="champ-date">Data de Início</label>
-                    <input type="date" id="champ-date" name="date" required>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="champ-contact-phone">Telefone de Contato</label>
+                        <input type="tel" id="champ-contact-phone" name="contactPhone" placeholder="(XX) XXXXX-XXXX">
+                    </div>
+                    <div class="input-group">
+                        <label for="champ-contact-email">E-mail de Contato</label>
+                        <input type="email" id="champ-contact-email" name="contactEmail">
+                    </div>
                 </div>
-            </div>
+            </fieldset>
 
-            <div class="input-row">
-                <div class="input-group">
-                    <label for="champ-contact-phone">Telefone de Contato</label>
-                    <input type="tel" id="champ-contact-phone" name="contactPhone" placeholder="(XX) XXXXX-XXXX">
+            <fieldset class="form-section">
+                <legend>Etapas</legend>
+                <div class="toggle-switch-group">
+                    <label for="multi-stage-toggle">Múltiplas Etapas?</label>
+                    <label class="switch">
+                        <input type="checkbox" id="multi-stage-toggle">
+                        <span class="slider round"></span>
+                    </label>
                 </div>
-                <div class="input-group">
-                    <label for="champ-contact-email">E-mail de Contato</label>
-                    <input type="email" id="champ-contact-email" name="contactEmail">
+                <div id="dynamic-stages-container"></div>
+                <div class="form-actions" id="add-stage-btn-container" style="display: none;">
+                    <button type="button" id="add-stage-btn" class="btn-secondary">Adicionar Etapa</button>
                 </div>
-            </div>
+            </fieldset>
 
-            <div class="input-row">
-                <div class="input-group">
-                    <label for="champ-state">Estado</label>
-                    <select id="champ-state" name="state"></select>
-                </div>
-                <div class="input-group">
-                    <label for="champ-city">Cidade</label>
-                    <select id="champ-city" name="city" disabled></select>
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label for="champ-place">Local (Kartódromo)</label>
-                <input type="text" id="champ-place" name="place" required>
-            </div>
-
-            <div class="input-group">
-                <label for="champ-file-input">Imagem de Capa</label>
-                <input type="file" id="champ-file-input" name="image-file" accept="image/*" style="display: none;">
-                <button type="button" class="btn-secondary" onclick="document.getElementById('champ-file-input').click();">Escolher Arquivo</button>
-                <img id="champ-preview" src="" alt="Pré-visualização da Capa" style="max-width: 200px; margin-top: 10px; display: none;">
-            </div>
-
-            <hr class="form-divider">
-
-            <div id="dynamic-stages-container"></div>
-
-            <div class="form-actions">
-                <button type="button" id="add-stage-btn" class="btn-secondary">Adicionar Etapa</button>
-            </div>
-
-            <div class="form-actions">
+            <div class="form-actions main-submit">
                 <button type="submit" class="btn-primary">Salvar Campeonato</button>
             </div>
         </form>

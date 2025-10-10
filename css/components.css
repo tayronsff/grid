@@ -184,6 +184,92 @@ textarea{resize:vertical}
 .modal-email-form .input-group i{ position:absolute; left:12px; top:50%; transform:translateY(-50%); color: var(--muted); }
 .modal-email-form .input-group input{ padding:12px 12px 12px 36px; }
 
+/* Form Sections */
+.form-section {
+    border: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+}
+
+.form-section legend {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text);
+    width: 100%;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 8px;
+}
+
+/* Toggle Switch */
+.toggle-switch-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--bg-elev);
+    border: 1px solid var(--line);
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--grad-start);
+    border-color: var(--grad-start);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--grad-start);
+}
+
+input:checked + .slider:before {
+    transform: translateX(22px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.main-submit {
+    margin-top: 32px;
+}
+
 /* Stage Form Group */
 .stage-form-group {
     border: 1px solid var(--line);
