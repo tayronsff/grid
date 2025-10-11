@@ -109,9 +109,11 @@ async function loadUpcomingStages() {
             const date = new Date(stage.date).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
             const card = document.createElement('div');
             card.className = 'event-card';
-            // Note: We'll need a generic image or use the championship's main image later
             card.innerHTML = `
-                <div class="event-image"><img src="https://images.unsplash.com/photo-1534214526114-0ea4d57cde2f?auto=format&fit=crop&w=1200&q=60" alt="${stage.name}"></div>
+                <div class="stage-card-logo">
+                    <img src="${stage.championshipLogo || 'https://i.imgur.com/s6f2JjE.png'}" alt="Logo do Campeonato">
+                </div>
+                <div class="event-image"><img src="${stage.championshipImage || 'https://images.unsplash.com/photo-1600359756097-8f5f85c9b613?auto=format&fit=crop&w=1200&q=60'}" alt="${stage.name}"></div>
                 <div class="event-info">
                     <h3>${stage.name}</h3>
                     <p style="color: var(--muted); margin: -4px 0 8px;">${stage.championshipName}</p>

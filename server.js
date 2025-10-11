@@ -8,15 +8,17 @@ const bcrypt = require('bcrypt');
 const app = express();
 const port = process.env.PORT || 3000;
 const saltRounds = 10;
-
 // --- Middleware ---
 app.use(cors());
 app.use(express.json());
 
 // --- Database Connection ---
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('MongoDB connected successfully.'))
-    .catch(err => console.error('MongoDB connection error:', err));
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        console.log('MongoDB connected');
+        seedDatabase(); // Call the seeding function once connected
+    })
+    .catch(err => console.log('MongoDB connection error:', err));
 
 // --- Mongoose Schemas ---
 const UserSchema = new mongoose.Schema({
@@ -180,7 +182,9 @@ app.get('/stages/upcoming', async (req, res) => {
                 .map(stage => ({
                     ...stage.toObject(),
                     championshipName: champ.name,
-                    championshipId: champ._id
+                    championshipId: champ._id,
+                    championshipImage: champ.image, // Add championship image
+                    championshipLogo: champ.logo    // Add championship logo
                 }))
         );
 
@@ -257,6 +261,56 @@ app.put('/championships/:id', async (req, res) => {
 app.get('/api/config', (req, res) => {
     res.json({ googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY });
 });
+
+// --- Seeding Function ---
+async function seedDatabase() {
+    try {
+        const demoUser = await User.findOne();
+        if (!demoUser) {
+            // console.log('Cannot seed database, no users found. Please create a user first.');
+            return;
+        }
+
+        const existingChamp = await Championship.findOne({ name: 'Campeonato de Demonstração' });
+        if (existingChamp) {
+            return; // Demo data already exists
+        }
+
+        console.log('Seeding database with demo championship...');
+        const today = new Date();
+        const stages = [];
+        for (let i = 1; i <= 5; i++) {
+            const stageDate = new Date(today);
+            stageDate.setDate(today.getDate() + (i * 7));
+            stages.push({
+                name: `Etapa de Demonstração ${i}`,
+                date: stageDate,
+                location: `Kartódromo Exemplo ${i}`
+            });
+        }
+
+        const demoChamp = new Championship({
+            name: 'Campeonato de Demonstração',
+            description: 'Este é um campeonato gerado automaticamente para fins de demonstração. Explore suas etapas e funcionalidades!',
+            date: stages[0].date,
+            place: 'Vários Locais',
+            image: 'https://images.unsplash.com/photo-1555532407-54c7c3b4f73c?auto=format&fit=crop&w=1200&q=80',
+            logo: 'https://i.imgur.com/s6f2JjE.png',
+            rulesLink: '#',
+            organizer: 'Equipe GridBoard',
+            contactEmail: 'contato@gridboard.com',
+            state: 'SP',
+            city: 'São Paulo',
+            creator: demoUser._id,
+            stages: stages
+        });
+
+        await demoChamp.save();
+        console.log('Demo championship created successfully.');
+    } catch (error) {
+        console.error('Error seeding database:', error);
+    }
+}
 
 // --- Server Start ---
 app.listen(port, () => {

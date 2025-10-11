@@ -37,12 +37,12 @@ textarea{resize:vertical}
 .events-grid{display:grid;gap:16px;grid-template-columns:1fr}
 @media (min-width:600px){.events-grid{grid-template-columns:repeat(2,1fr)}}
 @media (min-width:960px){.events-grid{grid-template-columns:repeat(3,1fr);gap:22px}}
-.event-card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:none;position:relative;display:flex;gap:12px}
+.event-card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:visible;box-shadow:none;position:relative;display:flex;flex-direction:column;gap:0;}
 .event-card{ transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
 .event-card:hover{ transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--grad-start); }
 .event-card.small{padding:12px;align-items:center}
 .event-card.featured{border-image:linear-gradient(90deg, var(--grad-start), var(--grad-end)) 1;}
-.event-image img{width:100%;height:150px;object-fit:cover;}
+.event-image img{width:100%;height:150px;object-fit:cover;border-radius:12px 12px 0 0;}
 .event-info{padding:12px 14px}
 .event-info h3,.event-info h4{margin:0 0 6px}
 .event-meta{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:.9rem}
@@ -282,6 +282,27 @@ input:checked + .slider:before {
 .stage-form-group h4 {
     margin-top: 0;
     margin-bottom: 24px;
+}
+
+/* Stage Card Logo */
+.stage-card-logo {
+    position: absolute;
+    right: 16px;
+    top: 110px; /* 150px (image height) - 40px (half of logo height) */
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 4px solid var(--card);
+    background-color: var(--card);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    z-index: 2;
+}
+
+.stage-card-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 /* Profile Dropdown */
