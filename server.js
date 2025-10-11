@@ -38,6 +38,9 @@ const StageSchema = new mongoose.Schema({
 });
 
 const ChampionshipSchema = new mongoose.Schema({
+    description: { type: String, default: '' },
+    logo: { type: String, default: '' },
+    rulesLink: { type: String, default: '' },
     name: { type: String, required: true },
     date: { type: Date, required: true },
     place: { type: String, required: true }, // Main location/track

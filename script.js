@@ -264,14 +264,21 @@ function setupFormListeners() {
         }
     });
 
-    document.getElementById('champ-file-input').addEventListener('change', (e) => {
-        const preview = document.getElementById('champ-preview');
-        const file = e.target.files[0];
-        if (file) {
-            preview.src = URL.createObjectURL(file);
-            preview.style.display = 'block';
-        }
-    });
+    function setupImagePreview(inputId, previewId) {
+        document.getElementById(inputId).addEventListener('change', (e) => {
+            const preview = document.getElementById(previewId);
+            const file = e.target.files[0];
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+    }
+
+    setupImagePreview('champ-file-input', 'champ-preview');
+    setupImagePreview('champ-logo-input', 'champ-logo-preview');
 
     document.getElementById('champ-state').addEventListener('change', (e) => {
         populateCities(e.target.value);
@@ -303,14 +310,19 @@ function setupFormListeners() {
     document.getElementById('create-championship-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const form = e.target;
-        const fileInput = document.getElementById('champ-file-input');
-        let imageUrl = '';
+        const coverFileInput = document.getElementById('champ-file-input');
+        const logoFileInput = document.getElementById('champ-logo-input');
+        let imageUrl = document.getElementById('champ-preview').src;
+        let logoUrl = document.getElementById('champ-logo-preview').src;
 
-        if (fileInput.files[0]) {
-            imageUrl = await uploadToCloudinary(fileInput.files[0]);
-            if (!imageUrl) {
-                return alert('Erro ao fazer upload da imagem de capa.');
-            }
+        if (coverFileInput.files[0]) {
+            imageUrl = await uploadToCloudinary(coverFileInput.files[0]);
+            if (!imageUrl) return alert('Erro ao fazer upload da imagem de capa.');
+        }
+
+        if (logoFileInput.files[0]) {
+            logoUrl = await uploadToCloudinary(logoFileInput.files[0]);
+            if (!logoUrl) return alert('Erro ao fazer upload da logo.');
         }
 
         const stages = [];
@@ -332,7 +344,10 @@ function setupFormListeners() {
             state: document.getElementById('champ-state').value,
             city: document.getElementById('champ-city').value,
             place: document.getElementById('champ-place').value,
+            description: document.getElementById('champ-description').value,
             image: imageUrl,
+            logo: logoUrl,
+            rulesLink: document.getElementById('champ-rules-link').value,
             stages: stages,
             creator: currentUser._id // Add creator ID
         };
@@ -538,6 +553,8 @@ function resetAndPrepareChampForm() {
     document.getElementById('champ-id').value = ''; // Clear ID for new entry
     document.getElementById('champ-preview').style.display = 'none'; // Hide preview
     document.getElementById('champ-preview').src = '';
+    document.getElementById('champ-logo-preview').style.display = 'none';
+    document.getElementById('champ-logo-preview').src = '';
 
     const container = document.getElementById('dynamic-stages-container');
     container.innerHTML = '';
@@ -561,6 +578,8 @@ async function editChampionship(champId) {
         document.getElementById('champ-contact-phone').value = champ.contactPhone;
         document.getElementById('champ-contact-email').value = champ.contactEmail;
         document.getElementById('champ-place').value = champ.place;
+        document.getElementById('champ-description').value = champ.description;
+        document.getElementById('champ-rules-link').value = champ.rulesLink;
 
         // State and City
         const stateSelect = document.getElementById('champ-state');
@@ -569,10 +588,20 @@ async function editChampionship(champId) {
         document.getElementById('champ-city').value = champ.city;
 
         // Image Preview
-        const preview = document.getElementById('champ-preview');
+        const coverPreview = document.getElementById('champ-preview');
         if (champ.image) {
-            preview.src = champ.image;
-            preview.style.display = 'block';
+            coverPreview.src = champ.image;
+            coverPreview.style.display = 'block';
+        } else {
+            coverPreview.style.display = 'none';
+        }
+
+        const logoPreview = document.getElementById('champ-logo-preview');
+        if (champ.logo) {
+            logoPreview.src = champ.logo;
+            logoPreview.style.display = 'block';
+        } else {
+            logoPreview.style.display = 'none';
         }
 
         // Stages

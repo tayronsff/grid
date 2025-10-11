@@ -486,6 +486,10 @@
                     <label for="champ-name">Nome do Campeonato</label>
                     <input type="text" id="champ-name" name="name" required>
                 </div>
+                <div class="input-group">
+                    <label for="champ-description">Descrição</label>
+                    <textarea id="champ-description" name="description" rows="3"></textarea>
+                </div>
                 <div class="input-row">
                     <div class="input-group">
                         <label for="champ-state">Estado</label>
@@ -500,11 +504,27 @@
                     <label for="champ-place">Local (Kartódromo)</label>
                     <input type="text" id="champ-place" name="place" required>
                 </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="champ-file-input">Imagem de Capa</label>
+                        <input type="file" id="champ-file-input" name="image-file" accept="image/*" style="display: none;">
+                        <button type="button" class="btn-secondary" onclick="document.getElementById('champ-file-input').click();">Escolher Capa</button>
+                        <img id="champ-preview" src="" alt="Pré-visualização da Capa" style="max-width: 100px; margin-top: 10px; display: none;">
+                    </div>
+                    <div class="input-group">
+                        <label for="champ-logo-input">Logo do Campeonato</label>
+                        <input type="file" id="champ-logo-input" name="logo-file" accept="image/*" style="display: none;">
+                        <button type="button" class="btn-secondary" onclick="document.getElementById('champ-logo-input').click();">Escolher Logo</button>
+                        <img id="champ-logo-preview" src="" alt="Pré-visualização da Logo" style="max-width: 100px; margin-top: 10px; display: none;">
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="form-section">
+                <legend>Regulamento</legend>
                 <div class="input-group">
-                    <label for="champ-file-input">Imagem de Capa</label>
-                    <input type="file" id="champ-file-input" name="image-file" accept="image/*" style="display: none;">
-                    <button type="button" class="btn-secondary" onclick="document.getElementById('champ-file-input').click();">Escolher Arquivo</button>
-                    <img id="champ-preview" src="" alt="Pré-visualização da Capa" style="max-width: 200px; margin-top: 10px; display: none;">
+                    <label for="champ-rules-link">Link para o Regulamento</label>
+                    <input type="url" id="champ-rules-link" name="rulesLink" placeholder="https://.../regulamento.pdf">
                 </div>
             </fieldset>
 
