@@ -33,6 +33,7 @@ const UserSchema = new mongoose.Schema({
 });
 
 const StageSchema = new mongoose.Schema({
+    layout: { type: String },
     name: { type: String, required: true },
     date: { type: Date, required: true },
     location: { type: String, required: true },

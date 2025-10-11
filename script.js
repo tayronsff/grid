@@ -334,6 +334,7 @@ function setupFormListeners() {
                 name: stageEl.querySelector('input[id^="stage-name-"]').value,
                 date: stageEl.querySelector('input[id^="stage-date-"]').value,
                 location: stageEl.querySelector('input[id^="stage-location-"]').value,
+                layout: stageEl.querySelector('input[id^="stage-layout-"]').value,
             });
         });
 
@@ -544,11 +545,14 @@ function addStageField(isMulti) {
                 <input type="text" id="stage-location-${stageIndex}" required>
             </div>
         </div>
+        <div class="input-group">
+            <label for="stage-layout-${stageIndex}">Traçado (Opcional)</label>
+            <input type="text" id="stage-layout-${stageIndex}" placeholder="Ex: Invertido, Tradicional...">
+        </div>
     `;
     container.appendChild(stageEl);
 }
 
-// Resets the championship form to its initial state (with one stage)
 function resetAndPrepareChampForm() {
     const form = document.getElementById('create-championship-form');
     form.reset();
@@ -627,6 +631,7 @@ async function editChampionship(champId) {
                 document.getElementById(`stage-name-${stageIndex}`).value = stage.name;
                 document.getElementById(`stage-date-${stageIndex}`).value = new Date(stage.date).toISOString().split('T')[0];
                 document.getElementById(`stage-location-${stageIndex}`).value = stage.location;
+                document.getElementById(`stage-layout-${stageIndex}`).value = stage.layout || '';
             });
         }, 100);
 
