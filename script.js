@@ -325,7 +325,6 @@ function setupFormListeners() {
         const data = {
             name: document.getElementById('champ-name').value,
             organizer: document.getElementById('champ-organizer').value,
-            date: document.getElementById('champ-date').value,
             contactPhone: document.getElementById('champ-contact-phone').value,
             contactEmail: document.getElementById('champ-contact-email').value,
             state: document.getElementById('champ-state').value,

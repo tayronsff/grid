@@ -53,7 +53,7 @@ const ChampionshipSchema = new mongoose.Schema({
     categories: [CategorySchema],
     registrationFee: { type: Number, default: 0 },
     name: { type: String, required: true },
-    date: { type: Date, required: true },
+    date: { type: Date }, // This will be auto-set from the first stage
     place: { type: String, required: true }, // Main location/track
     image: { type: String, required: true }, // Cover image
     organizer: { type: String, required: true },
@@ -237,6 +237,11 @@ app.post('/championships', async (req, res) => {
         if (!user) {
             return res.status(404).send('User not found.');
         }
+        // Auto-set championship date to the first stage date if not provided
+        if (champData.stages && champData.stages.length > 0 && !champData.date) {
+            champData.date = champData.stages[0].date;
+        }
+
         const champ = new Championship({ ...champData, creator });
         await champ.save();
         user.createdChampionships.push(champ._id);
