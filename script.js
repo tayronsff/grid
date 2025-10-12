@@ -147,6 +147,7 @@ async function loadChampionships() {
             const date = new Date(champ.date).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
             const card = document.createElement('div');
             card.className = 'event-card';
+            card.onclick = () => showChampionshipDetails(champ._id);
             card.innerHTML = `
                 <div class="event-image"><img src="${champ.image}" alt="${champ.name}"></div>
                 <div class="event-info">
@@ -688,6 +689,76 @@ async function editChampionship(champId) {
 }
 
 
+
+async function showChampionshipDetails(champId) {
+    try {
+        const response = await fetch(`${API_URL}/championships/${champId}`);
+        if (!response.ok) throw new Error('Championship not found.');
+        const champ = await response.json();
+
+        const content = document.getElementById('champ-detail-content');
+        
+        let categoriesHTML = champ.categories.map(cat => `
+            <div class="category-card">
+                <div>
+                    <h4>${cat.name}</h4>
+                    <span>Capacidade: ${cat.capacity} pilotos</span>
+                </div>
+            </div>`).join('');
+
+        let stagesHTML = champ.stages.map(stage => `
+            <div class="stage-card">
+                <div>
+                    <h4>${stage.name}</h4>
+                    <span>${new Date(stage.date).toLocaleDateString('pt-BR', {timeZone: 'UTC'})} - ${stage.location}</span>
+                </div>
+                <div class="price-tag">R$ ${stage.price.toFixed(2)}</div>
+            </div>`).join('');
+
+        content.innerHTML = `
+            <header class="champ-detail-header">
+                <img src="${champ.image}" class="champ-detail-cover">
+                <div class="champ-detail-overlay"></div>
+                <div class="page-container champ-detail-info">
+                    <img src="${champ.logo}" alt="Logo" class="champ-detail-logo">
+                    <h1 class="champ-detail-title">${champ.name}</h1>
+                    <div class="champ-detail-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> ${champ.city}, ${champ.state}</span>
+                        <span><i class="fas fa-user"></i> Organizado por ${champ.organizer}</span>
+                    </div>
+                </div>
+            </header>
+            <div class="page-container champ-detail-body">
+                <div class="champ-detail-section">
+                    <h3>Sobre o Campeonato</h3>
+                    <p>${champ.description}</p>
+                </div>
+                <div class="champ-detail-section">
+                    <h3>Categorias</h3>
+                    ${categoriesHTML || '<p>Nenhuma categoria definida.</p>'}
+                </div>
+                <div class="champ-detail-section">
+                    <h3>Etapas</h3>
+                    ${stagesHTML || '<p>Nenhuma etapa definida.</p>'}
+                </div>
+                <div class="champ-detail-section">
+                    <h3>Regulamento</h3>
+                    <a href="${champ.rulesLink}" target="_blank" class="btn-secondary">Ver Regulamento</a>
+                </div>
+                <div class="champ-detail-section">
+                    <h3>Inscrição (Campeonato Completo)</h3>
+                    <div class="price-tag">R$ ${champ.registrationFee.toFixed(2)}</div>
+                    <button class="btn-primary" style="margin-top: 16px;">Inscrever-se no Campeonato</button>
+                </div>
+            </div>
+        `;
+
+        showScreen('championship-detail-screen');
+    } catch (error) {
+        console.error('Error showing championship details:', error);
+        alert('Não foi possível carregar os detalhes do campeonato.');
+    }
+}
 
 // --- App Initialization ---
 window.addEventListener('DOMContentLoaded', () => {

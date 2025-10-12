@@ -313,6 +313,95 @@ input:checked + .slider:before {
     object-fit: cover;
 }
 
+/* Championship Detail Page */
+.champ-detail-header {
+    position: relative;
+    height: 300px;
+    color: #fff;
+}
+
+.champ-detail-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.champ-detail-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.2));
+    z-index: 2;
+}
+
+.champ-detail-info {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+    padding: 24px;
+}
+
+.champ-detail-logo {
+    width: 100px;
+    height: 100px;
+    border-radius: 12px;
+    border: 3px solid #fff;
+    margin-bottom: 16px;
+}
+
+.champ-detail-title {
+    font-size: 2rem;
+    font-weight: 900;
+    margin: 0;
+}
+
+.champ-detail-meta {
+    display: flex;
+    gap: 16px;
+    margin-top: 8px;
+    color: rgba(255,255,255,0.8);
+}
+
+.champ-detail-body {
+    padding: 24px;
+}
+
+.champ-detail-section {
+    margin-bottom: 32px;
+}
+
+.champ-detail-section h3 {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+}
+
+.category-card, .stage-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price-tag {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--success);
+}
+
 /* Profile Dropdown */
 .profile-dropdown {
     position: relative;
