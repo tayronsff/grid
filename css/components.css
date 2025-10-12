@@ -279,6 +279,14 @@ input:checked + .slider:before {
     position: relative;
 }
 
+.category-form-group {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
 .stage-form-group h4 {
     margin-top: 0;
     margin-bottom: 24px;

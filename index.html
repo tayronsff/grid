@@ -521,9 +521,13 @@
             </fieldset>
 
             <fieldset class="form-section">
-                <legend>Regulamento</legend>
-                <div class="input-group">
-                    <label for="champ-rules-link">Link para o Regulamento</label>
+                <legend>Categorias e Regulamento</legend>
+                <div id="dynamic-categories-container"></div>
+                <div class="form-actions">
+                    <button type="button" id="add-category-btn" class="btn-secondary">Adicionar Categoria</button>
+                </div>
+                <div class="input-group" style="margin-top: 20px;">
+                    <label for="champ-rules-link">Link para o Regulamento Geral (Opcional)</label>
                     <input type="url" id="champ-rules-link" name="rulesLink" placeholder="https://.../regulamento.pdf">
                 </div>
             </fieldset>

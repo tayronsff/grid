@@ -32,6 +32,11 @@ const UserSchema = new mongoose.Schema({
     resetPasswordExpires: Date
 });
 
+const CategorySchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    capacity: { type: Number, required: true }
+});
+
 const StageSchema = new mongoose.Schema({
     layout: { type: String },
     name: { type: String, required: true },
@@ -44,6 +49,7 @@ const ChampionshipSchema = new mongoose.Schema({
     description: { type: String, default: '' },
     logo: { type: String, default: '' },
     rulesLink: { type: String, default: '' },
+    categories: [CategorySchema],
     name: { type: String, required: true },
     date: { type: Date, required: true },
     place: { type: String, required: true }, // Main location/track

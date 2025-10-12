@@ -287,6 +287,7 @@ function setupFormListeners() {
     });
 
     document.getElementById('add-stage-btn').addEventListener('click', addStageField);
+    document.getElementById('add-category-btn').addEventListener('click', addCategoryField);
 
 
     // Create/Update Championship Form
@@ -333,6 +334,7 @@ function setupFormListeners() {
             logo: logoUrl,
             rulesLink: document.getElementById('champ-rules-link').value,
             stages: stages,
+            categories: collectCategoryData(),
             creator: currentUser._id // Add creator ID
         };
 
@@ -503,6 +505,38 @@ async function populateCities(state) {
     }
 }
 
+function addCategoryField() {
+    const container = document.getElementById('dynamic-categories-container');
+    const categoryIndex = container.children.length + 1;
+    const categoryEl = document.createElement('div');
+    categoryEl.className = 'category-form-group';
+    categoryEl.innerHTML = `
+        <div class="input-row">
+            <div class="input-group">
+                <label for="category-name-${categoryIndex}">Nome da Categoria</label>
+                <input type="text" id="category-name-${categoryIndex}" required>
+            </div>
+            <div class="input-group">
+                <label for="category-capacity-${categoryIndex}">Capacidade (pilotos)</label>
+                <input type="number" id="category-capacity-${categoryIndex}" required>
+            </div>
+        </div>
+    `;
+    container.appendChild(categoryEl);
+}
+
+function collectCategoryData() {
+    const categories = [];
+    const categoryElements = document.querySelectorAll('.category-form-group');
+    categoryElements.forEach(el => {
+        categories.push({
+            name: el.querySelector('input[id^="category-name-"]').value,
+            capacity: el.querySelector('input[id^="category-capacity-"]').value,
+        });
+    });
+    return categories;
+}
+
 function addStageField() {
     const container = document.getElementById('dynamic-stages-container');
     const stageCount = container.children.length;
@@ -552,6 +586,7 @@ function resetAndPrepareChampForm() {
     document.getElementById('champ-preview').src = '';
     document.getElementById('champ-logo-preview').style.display = 'none';
     document.getElementById('champ-logo-preview').src = '';
+    document.getElementById('dynamic-categories-container').innerHTML = '';
 
     const container = document.getElementById('dynamic-stages-container');
     container.innerHTML = '';
@@ -597,6 +632,21 @@ async function editChampionship(champId) {
             logoPreview.style.display = 'block';
         } else {
             logoPreview.style.display = 'none';
+        }
+
+        // Stages
+        // Categories
+        const categoriesContainer = document.getElementById('dynamic-categories-container');
+        categoriesContainer.innerHTML = '';
+        if (champ.categories && champ.categories.length > 0) {
+            champ.categories.forEach(() => addCategoryField());
+            setTimeout(() => {
+                champ.categories.forEach((cat, i) => {
+                    const catIndex = i + 1;
+                    document.getElementById(`category-name-${catIndex}`).value = cat.name;
+                    document.getElementById(`category-capacity-${catIndex}`).value = cat.capacity;
+                });
+            }, 100);
         }
 
         // Stages
