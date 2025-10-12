@@ -38,6 +38,7 @@ const CategorySchema = new mongoose.Schema({
 });
 
 const StageSchema = new mongoose.Schema({
+    price: { type: Number, default: 0 },
     layout: { type: String },
     name: { type: String, required: true },
     date: { type: Date, required: true },
@@ -50,6 +51,7 @@ const ChampionshipSchema = new mongoose.Schema({
     logo: { type: String, default: '' },
     rulesLink: { type: String, default: '' },
     categories: [CategorySchema],
+    registrationFee: { type: Number, default: 0 },
     name: { type: String, required: true },
     date: { type: Date, required: true },
     place: { type: String, required: true }, // Main location/track

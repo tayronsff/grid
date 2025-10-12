@@ -317,6 +317,7 @@ function setupFormListeners() {
                 date: stageEl.querySelector('input[id^="stage-date-"]').value,
                 location: stageEl.querySelector('input[id^="stage-location-"]').value,
                 layout: stageEl.querySelector('input[id^="stage-layout-"]').value,
+                price: stageEl.querySelector('input[id^="stage-price-"]').value,
             });
         });
 
@@ -335,6 +336,7 @@ function setupFormListeners() {
             rulesLink: document.getElementById('champ-rules-link').value,
             stages: stages,
             categories: collectCategoryData(),
+            registrationFee: document.getElementById('champ-fee').value,
             creator: currentUser._id // Add creator ID
         };
 
@@ -570,9 +572,15 @@ function addStageField() {
                 <input type="text" id="stage-location-${stageIndex}" required>
             </div>
         </div>
-        <div class="input-group">
-            <label for="stage-layout-${stageIndex}">Traçado (Opcional)</label>
-            <input type="text" id="stage-layout-${stageIndex}" placeholder="Ex: Invertido, Tradicional...">
+        <div class="input-row">
+            <div class="input-group">
+                <label for="stage-layout-${stageIndex}">Traçado (Opcional)</label>
+                <input type="text" id="stage-layout-${stageIndex}" placeholder="Ex: Invertido, Tradicional...">
+            </div>
+            <div class="input-group">
+                <label for="stage-price-${stageIndex}">Preço (Etapa)</label>
+                <input type="number" id="stage-price-${stageIndex}" placeholder="0.00">
+            </div>
         </div>
     `;
     container.appendChild(stageEl);
@@ -610,6 +618,7 @@ async function editChampionship(champId) {
         document.getElementById('champ-place').value = champ.place;
         document.getElementById('champ-description').value = champ.description;
         document.getElementById('champ-rules-link').value = champ.rulesLink;
+        document.getElementById('champ-fee').value = champ.registrationFee;
 
         // State and City
         const stateSelect = document.getElementById('champ-state');
@@ -666,6 +675,7 @@ async function editChampionship(champId) {
                 document.getElementById(`stage-date-${stageIndex}`).value = new Date(stage.date).toISOString().split('T')[0];
                 document.getElementById(`stage-location-${stageIndex}`).value = stage.location;
                 document.getElementById(`stage-layout-${stageIndex}`).value = stage.layout || '';
+                document.getElementById(`stage-price-${stageIndex}`).value = stage.price || 0;
             });
         }, 100);
 
