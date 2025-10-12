@@ -610,9 +610,8 @@ async function editChampionship(champId) {
             const champ = await response.json();
         // --- Populate Form ---
         document.getElementById('champ-id').value = champ._id;
-        document.getElementById('champ-name').value = champ.name;
+                document.getElementById('champ-name').value = champ.name;
         document.getElementById('champ-organizer').value = champ.organizer;
-        document.getElementById('champ-date').value = new Date(champ.date).toISOString().split('T')[0]; // Format date for input
         document.getElementById('champ-contact-phone').value = champ.contactPhone;
         document.getElementById('champ-contact-email').value = champ.contactEmail;
         document.getElementById('champ-place').value = champ.place;
