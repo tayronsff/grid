@@ -306,7 +306,6 @@ async function seedDatabase() {
         const demoChamp = new Championship({
             name: 'Campeonato de Demonstração',
             description: 'Este é um campeonato gerado automaticamente para fins de demonstração. Explore suas etapas e funcionalidades!',
-            date: stages[0].date,
             place: 'Vários Locais',
             image: 'https://images.unsplash.com/photo-1555532407-54c7c3b4f73c?auto=format&fit=crop&w=1200&q=80',
             logo: 'https://i.imgur.com/s6f2JjE.png',
